@@ -27,7 +27,7 @@ namespace Zhuang.Commons.Utils
 
     }
 
-    public class DateUtil
+    public static class DateUtil
     {
         public static DateTime GetNow()
         {

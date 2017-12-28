@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Zhuang.Commons.Utils
 {
-    public class EncryptionUtil
+    public static class EncryptionUtil
     {
         public static byte[] Default_IV = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
 

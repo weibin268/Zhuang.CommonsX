@@ -90,22 +90,19 @@ namespace Zhuang.Commons.FTP
             }
 
             using (FileStream outStream = new FileStream(localPath, FileMode.Create))
+            using (Stream ftpStream = DownloadFile(ftpFileName))
             {
-                using (Stream ftpStream = DownloadFile(ftpFileName))
-                {
-                    int buffLength = 2048;
-                    int readCount;
-                    byte[] buffer = new byte[buffLength];
+                int buffLength = 2048;
+                int readCount;
+                byte[] buffer = new byte[buffLength];
 
+                readCount = ftpStream.Read(buffer, 0, buffLength);
+                while (readCount > 0)
+                {
+                    outStream.Write(buffer, 0, readCount);
                     readCount = ftpStream.Read(buffer, 0, buffLength);
-                    while (readCount > 0)
-                    {
-                        outStream.Write(buffer, 0, readCount);
-                        readCount = ftpStream.Read(buffer, 0, buffLength);
-                    }
                 }
             }
-
         }
 
         public Stream DownloadFile(string ftpFileName)
@@ -229,19 +226,16 @@ namespace Zhuang.Commons.FTP
             request.Credentials = _credentials;
             request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
             using (WebResponse response = request.GetResponse())
+            using (var stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream, Encoding.Default))
             {
-                using (var stream = response.GetResponseStream())
+                string strLine = reader.ReadLine();
+                while (strLine != null)
                 {
-                    using (StreamReader reader = new StreamReader(stream, Encoding.Default))
-                    {
-                        string strLine = reader.ReadLine();
-                        while (strLine != null)
-                        {
-                            lsResult.Add(strLine);
-                            strLine = reader.ReadLine();
-                        }
-                    }
+                    lsResult.Add(strLine);
+                    strLine = reader.ReadLine();
                 }
+
                 return lsResult;
             }
         }

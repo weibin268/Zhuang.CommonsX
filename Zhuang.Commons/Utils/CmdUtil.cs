@@ -27,7 +27,7 @@ namespace Zhuang.Commons.Utils
             proc.Start();
 
             proc.StandardInput.AutoFlush = true;
-            proc.StandardInput.WriteLine(cmd + "&exit");
+            proc.StandardInput.WriteLine(cmd + " &exit");
 
             sbResult.Append(proc.StandardOutput.ReadToEnd());
 
